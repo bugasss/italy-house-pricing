@@ -1,0 +1,40 @@
+name: run main.py
+on:
+  schedule:
+    - cron: '0 * * * 6' # Every Saturday at 00:00
+
+jobs:
+  pull_data:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # If using Python:
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      # If using Python:
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # If using Python:
+      - name: execute script
+        run: python3 main.py
+
+      # NOTE: This commits everything in the `data` directory. Make sure this matches your needs
+      - name: Git commit
+        run: |
+          git add data
+          git config --local user.email "tommaso.ramella90@gmail.com"
+          config --local user.name "GitHub Action"
+          git commit -m "Commiting data"
+
+      # NOTE: Check that your branch name is correct here
+      - name: Git push
+        run: |
+          git push "https://${tommella90}:${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}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
