@@ -28,11 +28,5 @@ python main.py
 
 ### 2 DOCKER IMAGE
 Download this [docker image](https://hub.docker.com/repository/docker/tommella90/milano-housing/general) 
-```
-docker push tommella90/milano-housing:tagname
-```
 
-```
-docker run -it tommella90/milano-housing:2
-```
 
