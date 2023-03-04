@@ -7,10 +7,6 @@
     <list default="true" id="c050d78c-8313-4619-a245-9151dba36d6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/schedule.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/schedule.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clean_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/clean_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/immobiliare_scraping.py" beforeDir="false" afterPath="$PROJECT_DIR$/immobiliare_scraping.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/italy_housing_price_raw.parquet.gzip" beforeDir="false" afterPath="$PROJECT_DIR$/italy_housing_price_raw.parquet.gzip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
