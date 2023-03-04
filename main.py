@@ -8,14 +8,14 @@ warnings.filterwarnings("ignore")
 start = time.time()
 
 try:
-    scraping.main()
+    scraping.main(5)
 except:
-    "No new data to scrape. Try tomorrow"
+    print("No new data to scrape. Try tomorrow")
 
-print(colored('All libraries imported', 'blue', attrs=['bold']))
+print(colored('SCRAPING: DONE!', 'blue', attrs=['bold']))
 
 clean.main()
-print(colored("Done!", "blue", attrs=["bold"]))
+print(colored("CLEANING: DONE!", "blue", attrs=["bold"]))
 
 end = time.time()
 tot_time = round((end - start)/60, 2)

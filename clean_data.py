@@ -2,12 +2,17 @@ import pandas as pd
 import numpy as np
 from deep_translator import GoogleTranslator
 import re
+import termcolor as colored
 import warnings
 
 warnings.filterwarnings('ignore')
 
+print(colored("Cleaning data...", "blue", attrs=["bold"]))
+
 def upload_data():
-    df = pd.read_parquet('milano_housing_price_raw.parquet.gzip', engine='fastparquet')
+    df = pd.read_parquet('italy_housing_price_raw.parquet.gzip')
+
+#def name_df_columns(df):
     df.columns = ['price_bis', 'rooms', 'm2', 'bathrooms', 'floor', 'description',
                   'condominium_expenses', 'energy_class', 'date',
                   'contract', 'typology', 'surface', 'rooms2', 'floor2',
@@ -17,8 +22,12 @@ def upload_data():
                   'neighborhood', 'address', 'href', 'car_parking',
                   'renewable_energy_performance_index',
                   'energy_performance_building', 'housing units',
-                  'start_end_works', 'current_building_use',
-                  'energy_certification', 'co2_emissions']
+                  'start_end_works', 'current_building_use','energy_certification', 'co2_emissions',
+                  'deposit', 'type of sale', 'date_sell', 'minimum offer', 'minimum rise',
+                  'expense book debt', 'unpaid contribution',
+                  'number of buildings', 'updated on', 'cadastral data',
+                  'court', 'additional fees', 'procedure number']
+
     return df
 
 
@@ -100,11 +109,13 @@ def translate_dataframe_to_english(df, cols_to_translate):
         replace_with_english(df, col)
     return df
 
+"""
 def create_cleaned_data(df):
-    df.to_csv('milano_housing_price_clean.csv', index=False)
-    df.to_parquet('milano_housing_price_clean.parquet.gzip', engine='fastparquet')
+    df.to_csv('italy_housing_price_clean.csv', index=False)
+    df.to_parquet('italy_housing_price_clean.parquet.gzip', engine='fastparquet')
     print('data cleaned and saved')
     return df
+"""
 
 # main
 cols_to_translate = ['contract', 'typology', 'availability', 'condition', 'availability',
@@ -122,6 +133,10 @@ def main():
     for col in categorical_columns:
         df[col] = df[col].str.lower()
     df = translate_dataframe_to_english(df, cols_to_translate)
-    create_cleaned_data(df)
+    #create_cleaned_data(df)
     return df
 
+#%%
+df = main()
+
+#%%
