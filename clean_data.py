@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from deep_translator import GoogleTranslator
 import re
-import termcolor as colored
+from termcolor import colored
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -27,6 +27,7 @@ def upload_data():
                   'expense book debt', 'unpaid contribution',
                   'number of buildings', 'updated on', 'cadastral data',
                   'court', 'additional fees', 'procedure number']
+
 
     return df
 
