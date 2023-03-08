@@ -7,11 +7,13 @@ import warnings
 warnings.filterwarnings("ignore")
 
 regioni = ['lombardia', 'piemonte', 'veneto', 'emilia-romagna', 'toscana', 'lazio', 'campania',
-           'sicilia', 'sardegna', 'puglia', 'abruzzo', 'marche', 'liguria',
+           'sicilia', 'sardegna', 'puglia', 'abruzzo', 'marche', 'liguria', 'calabria'
            'friuli-venezia-giulia', 'trentino-alto-adige', 'umbria', 'molise',
            'basilicata', 'valle-d-aosta']
 
-n_pages = 2
+regioni = ['calabria']
+
+n_pages = 20
 
 start = time.time()
 
@@ -23,7 +25,7 @@ print(colored(f"Fetching the urls...", 'blue', attrs=['bold']))
 
 for index, regione in enumerate(regioni):
     try:
-        print(colored(f"scraping: {regione}, {index+1}/19", "green"))
+        print(colored(f"{regione.upper()}, {index+1}/19\n", "green"))
         rent.main(n_pages, regione)
     except:
         print("No new data to scrape. Try tomorrow")
@@ -38,7 +40,7 @@ print(colored(f"Fetching the urls...", 'blue', attrs=['bold']))
 
 for index, regione in enumerate(regioni):
     try:
-        print(colored(f"scraping: {regione}, {index+1}/19", "green"))
+        print(colored(f"{regione.upper()}, {index+1}/19\n", "green"))
         sale.main(n_pages, regione)
     except:
         print("No new data to scrape. Try tomorrow")
