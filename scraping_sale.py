@@ -163,7 +163,8 @@ def main(limit, regione):
         df_old = read_parquet()
         df_updated = pd.concat([df_old, df_new], axis=0)
         df_updated.to_parquet('italy_housing_price_sale_raw.parquet.gzip', compression='gzip')
-        print(colored(f"Saved {len(new_urls)} more annoucements", 'green', attrs=['bold']))
+        print(colored(f"Saved {len(new_urls)} more annoucements\n\n", 'green', attrs=['bold']))
+        print('_'*20)
 
 
 #%%

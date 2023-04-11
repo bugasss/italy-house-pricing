@@ -11,9 +11,7 @@ regioni = ['lombardia', 'piemonte', 'veneto', 'emilia-romagna', 'toscana', 'lazi
            'friuli-venezia-giulia', 'trentino-alto-adige', 'umbria', 'molise',
            'basilicata', 'valle-d-aosta']
 
-regioni = ['calabria']
-
-n_pages = 20
+n_pages = int(input("How many pages do you want to scrape? "))
 
 start = time.time()
 
@@ -23,9 +21,10 @@ print(colored("1. RENT", 'blue', attrs=['bold']))
 print(colored("_"*20, 'blue', attrs=['bold']))
 print(colored(f"Fetching the urls...", 'blue', attrs=['bold']))
 
+
 for index, regione in enumerate(regioni):
     try:
-        print(colored(f"{regione.upper()}, {index+1}/19\n", "green"))
+        print(colored(f"{regione.upper()}, {index+1}/19", "green"))
         rent.main(n_pages, regione)
     except:
         print("No new data to scrape. Try tomorrow")
@@ -40,7 +39,7 @@ print(colored(f"Fetching the urls...", 'blue', attrs=['bold']))
 
 for index, regione in enumerate(regioni):
     try:
-        print(colored(f"{regione.upper()}, {index+1}/19\n", "green"))
+        print(colored(f"{regione.upper()}, {index+1}/19", "green"))
         sale.main(n_pages, regione)
     except:
         print("No new data to scrape. Try tomorrow")
@@ -52,4 +51,3 @@ tot_time = round((end - start)/60, 2)
 print(tot_time, "minutes")
 
 
-#%%

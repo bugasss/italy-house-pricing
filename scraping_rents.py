@@ -199,10 +199,7 @@ def main(limit, regione):
         df_old = read_parquet()
         df_updated = pd.concat([df_old, df_new], axis=0)
         df_updated.to_parquet(dataframe, compression='gzip')
-        print(colored(f"Saved {len(new_urls)} more annoucements", 'green', attrs=['bold']))
-
-
-#%%
-main(2, "lombardia")
+        print(colored(f"Saved {len(new_urls)} more annoucements\n\n", 'green', attrs=['bold']))
+        print('_'*20)
 
 #%%
