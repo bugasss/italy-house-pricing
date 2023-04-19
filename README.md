@@ -5,9 +5,9 @@
 - If you run the scripts, they will automatically update the dataframe with all the new annoucements. 
 Over time, it will be possibile to perform time-series analysis. 
 
-  - [immobiliare_scrapint.py](https://github.com/tommella90/milano-housing-price/blob/main/immobiliare_scraping.py) updates the dataframe with all the non already existing announcements. 
-  - [clean_data.py](https://github.com/tommella90/milano-housing-price/blob/main/clean_data.py) cleans the data and returns a zipped csv with a pandas dataframe inside. 
-  - [main.py](https://github.com/tommella90/milano-housing-price/blob/main/clean_data.py) runs the 2 previous scripts
+  - [scraping_rents.py](https://github.com/tommella90/italy-house-pricing/blob/main/scraping_rents.py) and [scraping_sale.py](https://github.com/tommella90/italy-house-pricing/blob/main/scraping_sale.py) update the dataframe with all the non already existing announcements on the website. 
+  - [clean_data.py](https://github.com/tommella90/milano-housing-price/blob/main/clean_data.py) cleans the data and returns a zipped csv with a pandas dataframe inside (only for rents). 
+  - [main.py](https://github.com/tommella90/milano-housing-price/blob/main/clean_data.py) runs the scraping automatically. Can also be called with docker. 
 
 ____________________________________
 ***How to use***:
