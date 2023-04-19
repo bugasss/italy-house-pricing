@@ -9,7 +9,11 @@ warnings.filterwarnings('ignore')
 
 print(colored("Cleaning data...", "blue", attrs=["bold"]))
 
-
+def Translate(x):
+    try:
+        return GoogleTranslator(source='auto', target='en').translate(x)
+    except:
+        return x
 
 #%%
 class CleanHousingData:
@@ -17,16 +21,15 @@ class CleanHousingData:
         self.filepath = filepath
         self.df = None
 
-    def read_data(self):
+    def readData(self):
         self.df = pd.read_parquet(self.filepath)
 
-    def clean_data(self):
+    def cleanData(self):
         if self.df is None:
             self.read_data()
 
         self.df['prezzo'] = self.df['prezzo'].str.replace('€', '')
-        self.df['prezzo'] = self.df['prezzo'].str.replace('.', '', regex=False)
-        self.df['prezzo'] = self.df['prezzo'].apply(lambda x: pd.to_numeric(x, errors='coerce') )
+        self.df['prezzo'] = self.df['prezzo'].str.replace(r'[^0-9]+', '')
 
         self.df['bagni'] = self.df['bagni'].apply(lambda x: pd.to_numeric(x, errors='coerce') )
 
@@ -34,14 +37,13 @@ class CleanHousingData:
 
         self.df['m2'] = self.df['m2'].str.replace(r'\D', '')
         self.df['m2'] = self.df['m2'].str.replace('[^0-9\.]', '', regex=True)
+        self.df = self.df.loc[self.df['m2'] != '']
 
         self.df['accesso disabili'] = self.df['piano'].str.find('disabili') > 0
         self.df['ascensore'] = self.df['piano'].str.find('ascensore') > 0
 
         self.df['piano'] = self.df['piano'].str.replace('Piano terra', '0')
-        self.df['piano'] = self.df['piano'].str.replace('€', np.nan)
-
-        self.df['piano'] = self.df['piano'].apply(lambda x: x[0] if x else x)
+        self.df['piano'] = self.df['piano'].str.replace('€', "")
 
         date_regex = r'(\d{2}/\d{2}/\d{4})'
         self.df['Riferimento e Data annuncio'] = self.df['Riferimento e Data annuncio'].str.extract(date_regex)
@@ -74,10 +76,49 @@ class CleanHousingData:
 
         return self.df
 
+    def lowerCase(self):
+        self.df.columns = self.df.columns.str.lower()
+        return self.df
+
+    def cleanDates(self):
+        self.df['Riferimento e Data annuncio'] = pd.to_datetime(self.df['Riferimento e Data annuncio'], format='%d/%m/%Y')
+        self.df = self.df.loc[self.df['Riferimento e Data annuncio'] > '2023-01-01']
+        return self.df
+
+    def dropColumns(self):
+        columns = ['prezzo', 'stanze', 'm2', 'bagni', 'piano',
+                   'Riferimento e Data annuncio', 'contratto', 'tipologia', 'superficie',
+                   'locali', 'totale piani edificio', 'Posti Auto',
+                   'other_characteristics', 'citta', 'quartiere', 'via', 'altre caratteristiche',
+                   'spese condominio', 'cauzione', 'anno di costruzione', 'stato',
+                   'riscaldamento', 'Climatizzatore', 'Efficienza energetica', 'certificazione energetica',
+                   'Emissioni di CO₂', 'regione', 'accesso disabili',
+                   'ascensore', 'tipologia immobile']
+        self.df = self.df[columns]
+        return self.df
+
+    def saveData(self, filepath):
+        self.df.to_parquet(filepath, compression='gzip')
+
+    def translate(self):
+        columns_eng = [Translate(x) for x in self.df.columns]
+        cols_to_translate = ['contratto', 'tipologia', 'totale piani edificio', 'Posti auto',
+                             'other_characteristics', 'Tipologia immobile']
+        self.df.columns = columns_eng
+        return self.df
+
+    def main(self):
+        self.readData()
+        self.cleanData()
+        self.cleanDates()
+        self.lowerCase()
+        #self.dropColumns()
+        #self.translate()
+        self.saveData("italy_housing_price_rent_clean.parquet.gzip")
+        return self.df
+
 
 #%%
-#clean_data = CleanHousingData('italy_housing_price_rent_raw.parquet.gzip')
-#df = clean_data.clean_data()
-
-
+clean_data = CleanHousingData('italy_housing_price_rent_raw.parquet.gzip')
+clean_data.main()
 #%%
