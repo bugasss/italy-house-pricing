@@ -15,7 +15,7 @@ ____________________________________
 ### 1 GIT REPOSITORY
 In git run:
 ```
-git clone https://github.com/tommella90/milano-housing-price/
+git clone https://github.com/tommella90/italy-housing-price/
 ```
 In the new folder run:
 ```
