@@ -16,7 +16,7 @@ class PriceTimeSeries:
            )
 
     def __init__(self,
-                 df_path="../dataframes/italy_housing_price_rent_clean.parquet.gzip"):
+                 df_path="data/italy_housing_price_rent_clean.parquet.gzip"):
         self.df_path = df_path
 
     def load_data(self):

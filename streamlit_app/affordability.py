@@ -28,8 +28,8 @@ class Affordability():
 
 
     def __init__(self,
-                 df_path="../dataframes/italy_housing_price_rent_raw.parquet.gzip",
-                 provinces_path="../data/province-italiane.xlsx"):
+                 df_path="data/italy_housing_price_rent_raw.parquet.gzip",
+                 provinces_path="data/province-italiane.xlsx"):
         self.df_path = df_path
         self.provinces_path = provinces_path
 
