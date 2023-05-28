@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c050d78c-8313-4619-a245-9151dba36d6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/streamlit_app/affordability.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit_app/affordability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streamlit_app/map_neighbourhoods.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit_app/map_neighbourhoods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/streamlit_app/maps_italy.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit_app/maps_italy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/streamlit_app/streamlit_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit_app/streamlit_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/streamlit_app/time_series_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/streamlit_app/time_series_analysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
