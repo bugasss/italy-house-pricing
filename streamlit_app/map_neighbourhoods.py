@@ -51,7 +51,7 @@ class MapPriceNeighbourhoods:
         df = df.loc[df['citta'] == city]
 
         # city and neighboors cooridnates
-        city_jsn = pd.read_json(f"../data/prov_coords/{city}.json").T
+        city_jsn = pd.read_json(f"geodata/prov_coords/{city}.json").T
         city_jsn.columns = ['lat', 'lon']
         df = df.merge(city_jsn, left_on='quartiere', right_on=city_jsn.index, how='left')
 
