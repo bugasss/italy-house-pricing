@@ -12,7 +12,7 @@ class MapPriceItaly:
     FULL_CALENDAR = pd.DataFrame(pd.date_range(start="2023-01-01", end=TODAY), columns=['datetime'])
 
     def __init__(self,
-                 df_path="data/italy_housing_price_rent_clean.parquet.gzip",
+                 df_path="italy_housing_price_rent_clean.parquet.gzip",
                  municipality_coords_path="data/municipalities_centroids.csv",
                  region_coords_path="data/regions_centroids.csv"):
         self.df_path = df_path
