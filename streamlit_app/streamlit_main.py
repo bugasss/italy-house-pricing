@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import streamlit as st
+import plotly.express as px
 
 from maps_italy import MapPriceItaly
 from map_neighbourhoods import MapPriceNeighbourhoods
