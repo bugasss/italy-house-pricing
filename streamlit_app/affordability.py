@@ -3,7 +3,6 @@ import numpy as np
 from datetime import date, datetime
 import plotly.express as px
 import streamlit as st
-from sklearn import preprocessing
 
 class Affordability():
 

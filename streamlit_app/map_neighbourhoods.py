@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from datetime import date, datetime
-import matplotlib.pyplot as plt
 import plotly.express as px
 import streamlit as st
 

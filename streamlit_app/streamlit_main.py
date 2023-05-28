@@ -1,11 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import date
-import plotly.express as px
-import plotly.io as pio
 import streamlit as st
-from streamlit_folium import st_folium
-from datetime import datetime
 
 from maps_italy import MapPriceItaly
 from map_neighbourhoods import MapPriceNeighbourhoods
