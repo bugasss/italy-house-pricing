@@ -16,24 +16,13 @@ class PriceTimeSeries:
            )
 
     def __init__(self,
-                 df_path="../dataframes/italy_housing_price_rent_raw.parquet.gzip"):
+                 df_path="../dataframes/italy_housing_price_rent_clean.parquet.gzip"):
         self.df_path = df_path
 
     def load_data(self):
         return pd.read_parquet(self.df_path)
 
-    def clean_price(self, df):
-        df['prezzo'] = df['prezzo'].str.replace('€', '')
-        df['prezzo'] = df['prezzo'].str.replace(r'[^0-9]+', '')
-        df['prezzo'][df['prezzo'] == ''] = np.nan
-        df['prezzo'] = df['prezzo'].astype(float)
-        return df
-
     def clean_datetime(self, df):
-        df = df.rename(columns={'Riferimento e Data annuncio': "data"})
-        date_regex = r'(\d{2}/\d{2}/\d{4})'
-        df['datetime'] = df['data'].str.extract(date_regex)
-        df['datetime'] = pd.to_datetime(df['datetime'])
         df = df.loc[(df['datetime'] > '2023-01-01') & (df['datetime'] < self.TODAY)]
         df = pd.merge(df, self.FULL_CALENDAR, how='outer', on='datetime')
         return df
@@ -59,7 +48,6 @@ class PriceTimeSeries:
         return date_values[0], date_values[1]
 
     def clean_data(self, df, time_start='2023-01-01', time_end=TODAY):
-        df = self.clean_price(df)
         df = self.clean_datetime(df)
         df = self.get_week_and_month(df)
         df = self.select_time_range(df, time_start, time_end)
