@@ -1,124 +1,102 @@
+#https://towardsdatascience.com/creating-custom-transformers-for-sklearn-pipelines-d3d51852ecc1
+
 import pandas as pd
 import numpy as np
 from deep_translator import GoogleTranslator
 import re
-from termcolor import colored
-import warnings
+from datetime import date, datetime
 
-warnings.filterwarnings('ignore')
+class DataCleaner():
 
-print(colored("Cleaning data...", "blue", attrs=["bold"]))
+    ALTRE_CARATTERISTICHE = ["Arredato", "Balcone", "Impianto tv", "Esposizione esterna", "Fibra ottica",
+                             "Cancello elettrico", "Cantina", "Giardino comune", "Giardino privato",
+                             "Impianto allarme", "Portiere", "Piscina"]
+    TIPOLOGIE = ['villa', 'intera proprieta', 'appartamento', 'attico', 'loft', 'mansarda']
+    TODAY = np.datetime64(date.today())
+    FULL_CALENDAR = pd.DataFrame(pd.date_range(start="2023-01-01", end=TODAY), columns=['datetime'])
 
-def Translate(x):
-    try:
-        return GoogleTranslator(source='auto', target='en').translate(x)
-    except:
-        return x
+    def __init__(self, X):
+        self.X = X
 
-#%%
-class CleanHousingData:
-    def __init__(self, filepath):
-        self.filepath = filepath
-        self.df = None
+    def clean_data(self, X):
 
-    def readData(self):
-        self.df = pd.read_parquet(self.filepath)
+        # PREZZO
+        X['prezzo'] = X['prezzo'].str.replace('€', '')
+        X['prezzo'] = X['prezzo'].str.replace(r'[^0-9]+', '')
+        X['prezzo'][X['prezzo'] == ''] = np.nan
+        X['prezzo'] = X['prezzo'].astype(float)
 
-    def cleanData(self):
-        if self.df is None:
-            self.read_data()
-
-        self.df['prezzo'] = self.df['prezzo'].str.replace('€', '')
-        self.df['prezzo'] = self.df['prezzo'].str.replace(r'[^0-9]+', '')
-
-        self.df['bagni'] = self.df['bagni'].apply(lambda x: pd.to_numeric(x, errors='coerce') )
-
-        self.df['stanze'] = self.df['stanze'].apply(lambda x: x[0] if x else x)
-
-        self.df['m2'] = self.df['m2'].str.replace(r'\D', '')
-        self.df['m2'] = self.df['m2'].str.replace('[^0-9\.]', '', regex=True)
-        self.df = self.df.loc[self.df['m2'] != '']
-
-        self.df['accesso disabili'] = self.df['piano'].str.find('disabili') > 0
-        self.df['ascensore'] = self.df['piano'].str.find('ascensore') > 0
-
-        self.df['piano'] = self.df['piano'].str.replace('Piano terra', '0')
-        self.df['piano'] = self.df['piano'].str.replace('€', "")
-
+        # DATETIME
         date_regex = r'(\d{2}/\d{2}/\d{4})'
-        self.df['Riferimento e Data annuncio'] = self.df['Riferimento e Data annuncio'].str.extract(date_regex)
+        X['datetime'] = X['Riferimento e Data annuncio'].str.extract(date_regex)
+        X['datetime'] = pd.to_datetime(X['datetime'])
+
+        # superficie
+        X['superficie'] = X['superficie'].str.replace(r'\D', '')
+        X['superficie'] = X['superficie'].str.replace('[^0-9\.]', '', regex=True)
+        X['superficie'] = X['superficie'].astype(float)
+        X.loc[X['superficie'] > 300, 'superficie'] = np.nan
+
+        # POSTI AUTO
+        X['posti auto'] = X['Posti Auto'].apply(lambda x: 0 if x == None else 1)
+
+        # BAGNI PER STANZA
+        X['bagni'] = X['bagni'].apply(lambda x: x[0] if x else x)
+        X['bagni'] = X['bagni'].apply(lambda x: pd.to_numeric(x, errors='coerce') )
+        X['bagni'] = X['bagni'].astype(float)
+
+        errors = X['stanze'].where(X['stanze'].str.contains('m'), np.nan).unique()
+        X['stanze'] = X['stanze'].replace(errors, np.nan)
+        X['stanze'] = X['stanze'].apply(lambda x: pd.to_numeric(x, errors='coerce') )
+        X['stanze'] = X['stanze'].astype(float)
+
+        X['bagni per stanza'] = X['bagni'] / X['stanze']
+
+        # ULTIMO PIANO
+        #piano
+        X['piano'] = X['piano'].str.replace(r'\D', '')
+
+        # totale pieni edificio
+        X['totale piani edificio'] = X['totale piani edificio'].str.replace(r'\D', '')
+
+        # ultimo piano
+        X['ultimo piano'] = X['piano'] == X['totale piani edificio']
+        X['ultimo piano'] = X['ultimo piano'].map({True: 1, False: 0})
+
+        # energy class
+        X['classe energetica'] = X['Efficienza energetica'].apply(lambda x: x[0] if x else np.nan)
+
+        # tipologia
+        for tipologia in self.TIPOLOGIE:
+            X[tipologia] = X['tipologia'].apply(lambda x: tipologia in x.lower() if x else 0)
+            X[tipologia] = X[tipologia].map({True: 1, False: 0})
+
+        # stato
+        X['stato'] = X['stato'].apply(lambda x: x.lower() if x else x)
 
 
-        tipologie = self.df['tipologia'].str.split('|', 0)
-        self.df['tipologia immobile'] = [x[0] for x in tipologie if x[0]]
+        # riscaldamento
+        #X['riscaldamento centralizzato'] = X['riscaldamento'].apply(lambda x: "centralizzato" in x.lower() if x else 0)
+        X['riscaldamento centralizzato'] = X['riscaldamento'].str.contains("Centralizzato")
+        X['riscaldamento centralizzato'] = X['riscaldamento centralizzato'].map({True: 1, False: 0})
 
-        for i in tipologie:
-            if len(i) > 1:
-                self.df['tipologia proprieta'] = i[1]
-            else:
-                self.df['tipologia proprieta'] = None
+        # vista mare
+        X['vista mare'] = X['description'].str.contains("vista mare")
+        X['vista mare'] = X['vista mare'].map({True: 1, False: 0})
 
-        for i in tipologie:
-            if len(i) > 2:
-                self.df['classe immobile'] = i[2]
-            else:
-                self.df['classe immobile'] = None
+        # ALTRE CARATTERISTICHE
+        for char in self.ALTRE_CARATTERISTICHE:
+            X[char] = X['altre caratteristiche'].apply(lambda x: char in x)
+            X[char] = X[char].map({True: 1, False: 0})
 
-        self.df['locali'] = self.df['locali'].apply(lambda x: x[0] if x else x)
+        final_columns = ['regione', 'citta', 'quartiere', 'prezzo', 'datetime', 'posti auto',
+                         'bagni per stanza', 'bagni', 'stanze', 'ultimo piano', 'stato',
+                         'classe energetica', 'vista mare', 'riscaldamento centralizzato',
+                         'superficie']
+        final_columns.extend(self.ALTRE_CARATTERISTICHE)
+        final_columns.extend(self.TIPOLOGIE)
 
-        # self.df['other_characteristics'] = self.df['other_characteristics'].str.replace(' ', '_')
+        df = X[final_columns]
+        df.columns = [i.lower() for i in df.columns]
 
-        self.df['Data di inizio lavori e di consegna prevista'] = self.df['Data di inizio lavori e di consegna prevista'].str.extract(date_regex)
-
-        self.df['spese condominio'] = self.df['spese condominio'].str.replace('/mese', '')
-
-        self.df['spese condominio'] = self.df['spese condominio'].str.replace('€', '')
-
-        return self.df
-
-    def lowerCase(self):
-        self.df.columns = self.df.columns.str.lower()
-        return self.df
-
-    def cleanDates(self):
-        self.df['Riferimento e Data annuncio'] = pd.to_datetime(self.df['Riferimento e Data annuncio'], format='%d/%m/%Y')
-        self.df = self.df.loc[self.df['Riferimento e Data annuncio'] > '2023-01-01']
-        return self.df
-
-    def dropColumns(self):
-        columns = ['prezzo', 'stanze', 'm2', 'bagni', 'piano',
-                   'Riferimento e Data annuncio', 'contratto', 'tipologia', 'superficie',
-                   'locali', 'totale piani edificio', 'Posti Auto',
-                   'other_characteristics', 'citta', 'quartiere', 'via', 'altre caratteristiche',
-                   'spese condominio', 'cauzione', 'anno di costruzione', 'stato',
-                   'riscaldamento', 'Climatizzatore', 'Efficienza energetica', 'certificazione energetica',
-                   'Emissioni di CO₂', 'regione', 'accesso disabili',
-                   'ascensore', 'tipologia immobile']
-        self.df = self.df[columns]
-        return self.df
-
-    def saveData(self, filepath):
-        self.df.to_parquet(filepath, compression='gzip')
-
-    def translate(self):
-        columns_eng = [Translate(x) for x in self.df.columns]
-        cols_to_translate = ['contratto', 'tipologia', 'totale piani edificio', 'Posti auto',
-                             'other_characteristics', 'Tipologia immobile']
-        self.df.columns = columns_eng
-        return self.df
-
-    def main(self):
-        self.readData()
-        self.cleanData()
-        self.cleanDates()
-        self.lowerCase()
-        #self.dropColumns()
-        #self.translate()
-        self.saveData("italy_housing_price_rent_clean.parquet.gzip")
-        return self.df
-
-
-#%%
-clean_data = CleanHousingData('italy_housing_price_rent_raw.parquet.gzip')
-clean_data.main()
-#%%
+        return df

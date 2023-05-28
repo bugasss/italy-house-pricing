@@ -166,5 +166,5 @@ def main(limit, regione):
         print(colored(f"Saved {len(new_urls)} more annoucements\n\n", 'green', attrs=['bold']))
         print('_'*20)
 
+        return df_updated
 
-#%%

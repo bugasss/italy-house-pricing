@@ -8,12 +8,14 @@ from termcolor import colored
 import warnings
 import numpy as np
 import re
-dataframe = "italy_housing_price_rent_raw.parquet.gzip"
 
+#%%
 warnings.filterwarnings("ignore")
+
 
 def read_parquet():
     try:
+        dataframe = "dataframes/italy_housing_price_rent_raw.parquet.gzip"
         return pd.read_parquet(dataframe)
     except:
         df = pd.DataFrame()
@@ -30,9 +32,9 @@ def get_downloaded_hrefs(df):
 
 def get_all_webpages(limit, regione):
     urls = []
-    urls.append(f"https://www.immobiliare.it/affitto-case/{regione}/?criterio=rilevanza")
+    urls.append(f"https://www.immobiliare.it/affitto-case/{regione}/?criterio=dataModifica&ordine=desc")
     for page in range(2, limit):
-        url = f"https://www.immobiliare.it/affitto-case/{regione}/?criterio=rilevanza&pag={page}"
+        url = f"https://www.immobiliare.it/affitto-case/{regione}/?criterio=dataModifica&ordine=desc&pag={page}"
         urls.append(url)
     return urls
 
@@ -196,10 +198,8 @@ def main(limit, regione):
             except Exception as e:
                 print("ERROR : "+str(e), url)
 
-        df_old = read_parquet()
-        df_updated = pd.concat([df_old, df_new], axis=0)
-        df_updated.to_parquet(dataframe, compression='gzip')
-        print(colored(f"Saved {len(new_urls)} more annoucements\n\n", 'green', attrs=['bold']))
-        print('_'*20)
+        #df_updated.to_parquet("dataframes/italy_housing_price_rent_raw.parquet.gzip", compression='gzip')
+        print(colored(f"Saved {len(new_urls)} more annoucements\n", 'green', attrs=['bold']))
 
-#%%
+        return df_new
+
