@@ -147,7 +147,7 @@ elif option == "Affordability":
 
     @st.cache_data
     def load_data():
-        return pd.read_parquet("../dataframes/italy_housing_price_rent_clean.parquet.gzip")
+        return pd.read_parquet("italy_housing_price_rent_clean.parquet.gzip")
 
     df = load_data()
     st.markdown("#### CHOOSE A PRICE RANGE AND COMPARE WHAT YOU CAN AFFORD IN DIFFERENT CITIES")
