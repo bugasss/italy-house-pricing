@@ -15,7 +15,7 @@ css_file = current_dir / "main.css"
 ## CONFIG ##
 st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",
-                   page_title="spotify_recommender",
+                   page_title="ITALY HOUSING PRICES",
                    page_icon=":🧊:")
 
 m = st.markdown("""
@@ -34,7 +34,6 @@ div.stButton > button:first-child {
     margin: auto;
     display: block;
 }
-
 
 div.stButton > button:hover {
 	background:linear-gradient(to bottom, #ce1126 5%, #ff5a5a 100%);
