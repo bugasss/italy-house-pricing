@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c050d78c-8313-4619-a245-9151dba36d6a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataframes/italy_housing_price_rent_clean.parquet.gzip" beforeDir="false" afterPath="$PROJECT_DIR$/dataframes/italy_housing_price_rent_clean.parquet.gzip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataframes/italy_housing_price_rent_raw.parquet.gzip" beforeDir="false" afterPath="$PROJECT_DIR$/dataframes/italy_housing_price_rent_raw.parquet.gzip" afterDir="false" />
-    </list>
+    <list default="true" id="c050d78c-8313-4619-a245-9151dba36d6a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
