@@ -102,7 +102,7 @@ class MapPriceItaly:
             hover_data=["prezzo"],
             color="prezzo",
             color_continuous_scale="turbo",
-            range_color=(0, max_price),
+            range_color=(min_price, max_price),
             size="prezzo",
             zoom=5,
             center=dict(lat=41.8719, lon=12.5674),
@@ -111,6 +111,7 @@ class MapPriceItaly:
             height=800, width=800
                                 )
         fig.update_layout(mapbox_style="open-street-map")
+
         fig.update_layout(margin={"r":5,"t":0,"l":0,"b":0})
         st.plotly_chart(fig)
 
@@ -120,11 +121,11 @@ class MapPriceItaly:
         df = self.clean_data(df)
         max_value = int(round(df['prezzo'].max()))
         df = self.slice_dataframe(df, max_price=max_value)
-        max_value = int(round(df['prezzo'].max()))
+        max_value, min_value = int(round(df['prezzo'].max())), int(round(df['prezzo'].min()))
         price_ranges_city = st.slider('SELECT A PRICE RANGE',
                                       key="price_range",
-                                      min_value=0, max_value=max_value,
-                                      value=(200, 5000))
+                                      min_value=min_value, max_value=max_value,
+                                      value=(400, 1000))
         #st.write('You selected:', price_ranges_city)
         return price_ranges_city[0], price_ranges_city[1]
 
@@ -154,6 +155,7 @@ class MapPriceItaly:
         df = self.clean_data(df)
 
         #df = self.clean_data(df)
+        st.markdown("## AVERAGE PRICE BY MUNICIPALITY")
         self.map_municipalities(df, operation, coordinates_df, date_start, date_end, min_price, max_price)
 
 #%%

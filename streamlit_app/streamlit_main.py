@@ -85,7 +85,6 @@ def get_img_with_href(local_img_path, target_url):
 
 st.markdown("<h1 style='text-align: center; color: black;'>ITALIAN RENTS APP</h1>", unsafe_allow_html=True)
 
-
 show_description = st.checkbox("SHOW DESCRIPTION", value="Yes", key="show_description")
 
 if show_description:
