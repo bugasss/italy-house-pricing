@@ -18,7 +18,7 @@ css_file = current_dir / "main.css"
 st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",
                    page_title="ITALY HOUSE PRICES",
-                   page_icon=":🧊:")
+                   page_icon=":🏠:")
 
 m = st.markdown("""
 <style>
