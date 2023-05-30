@@ -69,12 +69,13 @@ class PriceTimeSeries:
         fig = px.line(df, x=period, y='prezzo',
                       color=area,
                       hover_data=[area],
-                      title=title,
                       color_discrete_sequence=px.colors.qualitative.Pastel,
                       template="plotly_white",
                       width=1000, height=600,
                       )
-        fig.update_layout(xaxis_title="Date", yaxis_title="Price (euros)")
+        fig.update_layout(xaxis_title="Date", yaxis_title="Price (euros)",
+                          title={'text': title,'font': {'size': 24} }
+                          )
         st.plotly_chart(fig)
 
     def plot_average_italy(self, df, period, max_price=5000):
@@ -135,19 +136,19 @@ class PriceTimeSeries:
         df = self.load_data()
         df = self.clean_data(df, time_start, time_end)
 
-        st.write("#### **AVERAGE PRICE IN ITALY")
+        #st.write("#### **AVERAGE PRICE IN ITALY")
         self.plot_average_italy(df, period, max_price)
         st.write('-'*20)
 
-        st.write("#### **AVERAGE PRICE PER REGION")
+        #st.write("#### **AVERAGE PRICE PER REGION")
         self.plot_average_by_region(df, period, regions, max_price)
         st.write('-'*20)
 
-        st.write("#### **AVERAGE PRICE IN MUNICIPALITY")
+        #st.write("#### **AVERAGE PRICE IN MUNICIPALITY")
         self.plot_average_by_municipality(df, period, municipalities, max_price)
         st.write('-'*20)
 
-        st.write("#### **AVERAGE PRICE PER NEIGHBORHOOD")
+        #st.write("#### **AVERAGE PRICE PER NEIGHBORHOOD")
         self.plot_average_by_neighbourhoods(df, period, city, neighbourhoods, max_price)
 
 

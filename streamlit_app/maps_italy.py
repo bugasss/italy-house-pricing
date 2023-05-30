@@ -125,7 +125,7 @@ class MapPriceItaly:
                                       key="price_range",
                                       min_value=0, max_value=max_value,
                                       value=(200, 5000))
-        st.write('You selected:', price_ranges_city)
+        #st.write('You selected:', price_ranges_city)
         return price_ranges_city[0], price_ranges_city[1]
 
     def box_choice_math_operation(self):

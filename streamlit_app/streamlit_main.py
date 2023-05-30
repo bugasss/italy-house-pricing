@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import streamlit as st
+import base64
+import os
 
 from maps_italy import MapPriceItaly
 from map_neighbourhoods import MapPriceNeighbourhoods
@@ -15,7 +17,7 @@ css_file = current_dir / "main.css"
 ## CONFIG ##
 st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",
-                   page_title="ITALY HOUSING PRICES",
+                   page_title="ITALY HOUSE PRICES",
                    page_icon=":🧊:")
 
 m = st.markdown("""
@@ -62,25 +64,71 @@ REGIONI = ['Italy',
            ]
 
 
+#@st.cache(allow_output_mutation=True)
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+#@st.cache(allow_output_mutation=True)
+def get_img_with_href(local_img_path, target_url):
+    img_format = os.path.splitext(local_img_path)[-1].replace('.', '')
+    bin_str = get_base64_of_bin_file(local_img_path)
+    html_code = f'''
+        <a href="{target_url}">
+            <img src="data:icons/{img_format};base64,{bin_str}" width="40" height="40" />
+        </a>'''
+    return html_code
+
 
 #%% FUNCTIONS
 
-st.markdown("<h1 style='text-align: center; color: green;'>ITALIAN RENTS APP</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: black;'>ITALIAN RENTS APP</h1>", unsafe_allow_html=True)
 
-st.markdown("### This app show the average price of rents in Italy and other cool staffs")
-st.markdown("##### **Data source:** [immobiliare.it](https://www.immobiliare.it/)")
 
-st.write("-"*10)
+show_description = st.checkbox("SHOW DESCRIPTION", value="Yes", key="show_description")
+
+if show_description:
+    git_path = "https://github.com/tommella90"
+    link_path = "https://www.linkedin.com/in/tommaso-ramella"
+    git = get_img_with_href('icons/git.png', 'https://github.com/tommella90')
+    lnkd = get_img_with_href('icons/linkedin.png', 'https://www.linkedin.com/in/tommaso-ramella')
+
+    col1, col2, col3 = st.columns([1, 1, 2])
+
+    st.write("-"*10)
+    st.markdown("#### 🏠 THIS APP SHOWS THE AVERAGE RENT PRICES IN ITALY AND OTHER COOL STAFFS")
+    with col1:
+        st.write("my github:")
+        st.markdown(git, unsafe_allow_html=True)
+    with col2:
+        st.write("my linkedin:")
+        st.markdown(lnkd, unsafe_allow_html=True)
+    with col3:
+        st.write("Data source: [immobiliare.it](https://www.immobiliare.it/)")
+
+    st.markdown("#### This app has 4 main functionalities:")
+    st.markdown(""" 
+    1) 🍕 **ITALIAN MAP**: shows the average price per municipality on the Italian map
+    2) 📪 **MUNICIPALITY MAP**: select a municipality, and see the average price per neighbourhoods
+    3) ⌚ **TIME SERIES ANALYSIS**: show the average price in Italy, per region, city and neighbourhoods
+    4) 💰 **AFFORDABILITY**: choose a price range and compare what you can afford in different cities (squared meters, rooms, etc...)
+    """)
+    st.markdown("##### 📊 I upload new data every week, so stay tuned!")
+    st.write("-"*10)
+
+st.write("\n")
+st.markdown("##### WHAT ARE YOU INTERESTED IN?")
 option = st.selectbox(
-    'WHAT ARE YOU INTERESTED TO?',
-    ('Italian Map', 'Neighbourhoods Map', 'Time-series', 'Affordability')
+    'choose an option',
+    ('Italian Map', 'Neighbourhoods Map', 'Time-series', 'Affordability'),
+    index=0, key="option", help="choose an option"
 )
 
 
 #%% MAPS
 if option == "Italian Map":
-    st.markdown("### **ITALIAN MAP**")
-    st.markdown("##### DISPLAY AVERAGE RENTS PRICES IN ITALY ON THE MAP")
+    st.markdown("### **ITALIAN MAP** - MAP AVERAGE RENTS PRICES IN ITALY")
     st.write("- Select a time and a price range of preference from the sidebar")
 
     italy_mapper = MapPriceItaly()
@@ -97,8 +145,7 @@ if option == "Italian Map":
 
 
 elif option == 'Neighbourhoods Map':
-    st.markdown("### **NEIGHBOURHOODS MAP**")
-    st.markdown("##### DISPLAY AVERAGE RENTS PRICES PER CITY ON THE MAP")
+    st.markdown("### **NEIGHBOURHOODS MAP** - MAP AVERAGE RENTS PRICES PER CITY")
     st.write("- Select a city from the sidebar to display the neighbourhoods prices")
     st.write("- Select a time and a price range of preference from the sidebar")
     neighbourhood_mapper = MapPriceNeighbourhoods()
@@ -116,8 +163,8 @@ elif option == 'Neighbourhoods Map':
     )
 
 elif option == "Time-series":
-    st.markdown("### **TIME-SERIES**")
-    st.markdown("##### DISPLAY AVERAGE RENTS PRICES IN ITALY, PER REGION, CITY AND NEIGHBOURHOODS OVER TIME")
+    st.markdown("### **TIME-SERIES** - DISPLAY AVERAGE RENTS PRICES IN ITALY, PER REGION, CITY AND NEIGHBOURHOODS OVER TIME")
+    st.write(" - Select a time range (daily, weekly or monthly")
     st.write(" - Select a region/city from the sidebar to display the neighbourhoods prices")
     st.write(" - Select a time and a price range of preference from the sidebar")
 
