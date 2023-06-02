@@ -100,3 +100,13 @@ class DataCleaner():
         df.columns = [i.lower() for i in df.columns]
 
         return df
+
+#%%
+import pandas as pd
+df = pd.read_parquet('dataframes/italy_housing_price_rent_clean.parquet.gzip')
+df.to_csv('dataframes/italy_housing_price_rent_clean.csv', index=False)
+
+
+#%%
+df = pd.read_csv("dataframes/italy_housing_price_rent_raw.csv")
+#%%

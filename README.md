@@ -10,6 +10,7 @@ It also contains the **STREAMLIT APP**, with 4 main functionalities:
 3) TIME SERIES ANALYSIS: show the average price in Italy, per region, city and neighbourhoods
 4) AFFORDABILITY: choose a price range and compare what you can afford in different cities (squared meters, rooms, etc...)
 
+[link](https://tommella90-italy-house-prici-streamlit-appstreamlit-main-p06j3n.streamlit.app/)
 ____________________________________
 ***How to use***:
 ____________________________________
@@ -26,8 +27,5 @@ To create the data, run:
 ```
 python main.py
 ```
-
-### 2 DOCKER IMAGE
-Download this [docker image](https://hub.docker.com/repository/docker/tommella90/milano-housing/general) 
 
 
